@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Secure Media Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-title">
+                        <h1>🔐 My Media Library</h1>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <!-- Controls -->
+            <div class="controls">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search media files...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="video">Videos</button>
+                    <button class="filter-btn" data-filter="audio">Audio</button>
+                    <button class="filter-btn" data-filter="image">Images</button>
+                    <button class="filter-btn" data-filter="pdf">PDFs</button>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+            </div>
+
+            <!-- Media Grid -->
+            <div id="mediaGrid" class="media-grid"></div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center" style="padding: 3rem;">
+                <h2 style="color: var(--text-muted);">No media files found</h2>
+                <p class="text-muted">The admin hasn't uploaded any content yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🔒 Enter Password</h2>
+                <button class="modal-close" onclick="closePasswordModal()">×</button>
+            </div>
+            <div id="modal-alert"></div>
+            <p class="text-muted mb-2" id="mediaName"></p>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="filePassword">File Password</label>
+                    <input type="password" id="filePassword" placeholder="Enter the password for this file" required
+                        autocomplete="off">
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Unlock</button>
+                    <button type="button" class="btn btn-secondary" onclick="closePasswordModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Media Viewer Modal -->
+    <div id="mediaModal" class="modal-overlay">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2 id="viewerTitle"></h2>
+                <button class="modal-close" onclick="closeMediaModal()">×</button>
+            </div>
+            <div id="mediaViewer"></div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

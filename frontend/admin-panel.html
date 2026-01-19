@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Secure Media Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-title">
+                        <h1>⚙️ Admin Panel</h1>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="admin-grid">
+                <!-- Upload Section -->
+                <div class="card">
+                    <h2>📤 Upload Media</h2>
+                    <div id="upload-alert"></div>
+
+                    <form id="uploadForm">
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-icon">📁</div>
+                            <p><strong>Click to select</strong> or drag and drop</p>
+                            <p class="text-muted" style="font-size: 0.875rem;">Video, Audio, Image, or PDF (Max 100MB)
+                            </p>
+                            <input type="file" id="fileInput" accept="video/*,audio/*,image/*,application/pdf"
+                                style="display: none;" required>
+                        </div>
+
+                        <div id="fileInfo" class="hidden"
+                            style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                            <p><strong>Selected file:</strong> <span id="fileName"></span></p>
+                            <p class="text-muted"><span id="fileSize"></span></p>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label for="filePassword">Set Access Password</label>
+                            <input type="text" id="filePassword" placeholder="Users will need this to access the file"
+                                required minlength="4">
+                            <small class="text-muted">At least 4 characters</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Upload File
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Media List Section -->
+                <div class="card">
+                    <h2>📊 Uploaded Media</h2>
+
+                    <div id="loading" class="hidden">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div id="emptyState" class="hidden text-center" style="padding: 2rem;">
+                        <p class="text-muted">No files uploaded yet</p>
+                    </div>
+
+                    <div id="mediaTable" class="table-container hidden">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Uploaded</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mediaTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>✏️ Edit Media</h2>
+                <button class="modal-close" onclick="closeEditModal()">×</button>
+            </div>
+            <div id="edit-alert"></div>
+            <form id="editForm">
+                <input type="hidden" id="editMediaId">
+                <div class="form-group">
+                    <label for="editFileName">File Name</label>
+                    <input type="text" id="editFileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword">New Password (leave empty to keep current)</label>
+                    <input type="text" id="editPassword" placeholder="Optional: Set a new password" minlength="4">
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>⚠️ Confirm Delete</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">×</button>
+            </div>
+            <p>Are you sure you want to delete this file? This action cannot be undone.</p>
+            <p><strong id="deleteFileName"></strong></p>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button id="confirmDeleteBtn" class="btn btn-danger" style="flex: 1;">Delete</button>
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
