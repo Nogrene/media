@@ -1,5 +1,7 @@
 // API Base URL
-const API_URL = 'https://media-9mxu.onrender.com/api';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000/api'
+    : 'https://media-9mxu.onrender.com/api';
 
 // Check authentication
 const token = localStorage.getItem('token');

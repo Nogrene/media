@@ -58,7 +58,11 @@ router.post(
                 res.status(400).json({ message: 'Invalid user data' });
             }
         } catch (error) {
-            console.error(error);
+            console.error('✗ Signup error:', {
+                email: req.body.email,
+                error: error.message,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            });
             res.status(500).json({ message: 'Server error during registration' });
         }
     }
@@ -98,7 +102,11 @@ router.post(
                 res.status(401).json({ message: 'Invalid email or password' });
             }
         } catch (error) {
-            console.error(error);
+            console.error('✗ Login error:', {
+                email: req.body.email,
+                error: error.message,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            });
             res.status(500).json({ message: 'Server error during login' });
         }
     }

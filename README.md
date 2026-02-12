@@ -160,8 +160,6 @@ paidfor/
 ## Default Credentials
 
 **Admin:**
-- Username: `admin`
-- Password: `LIPAMSEE!41`
 
 *Note: Change these in production!*
 

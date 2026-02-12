@@ -32,7 +32,10 @@ const initializeAdmin = async () => {
             console.log('Default admin created');
         }
     } catch (error) {
-        console.error('Error initializing admin:', error);
+        console.error('✗ Error initializing admin:', error.message);
+        if (process.env.NODE_ENV === 'development') {
+            console.error(error.stack);
+        }
     }
 };
 
@@ -74,7 +77,11 @@ router.post(
                 res.status(401).json({ message: 'Invalid credentials' });
             }
         } catch (error) {
-            console.error(error);
+            console.error('✗ Admin login error:', {
+                username: req.body.username,
+                error: error.message,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            });
             res.status(500).json({ message: 'Server error during login' });
         }
     }
@@ -141,7 +148,11 @@ router.post('/upload', protectAdmin, upload.single('file'), async (req, res) => 
         if (req.file) {
             fs.unlinkSync(req.file.path);
         }
-        console.error(error);
+        console.error('✗ File upload error:', {
+            filename: req.file?.originalname,
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error uploading file' });
     }
 });
@@ -160,7 +171,10 @@ router.get('/media', protectAdmin, async (req, res) => {
 
         res.json(media);
     } catch (error) {
-        console.error(error);
+        console.error('✗ Fetch media error:', {
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error fetching media' });
     }
 });
@@ -203,7 +217,11 @@ router.put('/media/:id', protectAdmin, async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
+        console.error('✗ Update media error:', {
+            mediaId: req.params.id,
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error updating media' });
     }
 });
@@ -231,7 +249,11 @@ router.delete('/media/:id', protectAdmin, async (req, res) => {
 
         res.json({ message: 'Media deleted successfully' });
     } catch (error) {
-        console.error(error);
+        console.error('✗ Delete media error:', {
+            mediaId: req.params.id,
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error deleting media' });
     }
 });

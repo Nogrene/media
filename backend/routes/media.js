@@ -18,7 +18,10 @@ router.get('/', protect, async (req, res) => {
 
         res.json(media);
     } catch (error) {
-        console.error(error);
+        console.error('✗ Fetch media list error:', {
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error fetching media' });
     }
 });
@@ -60,7 +63,11 @@ router.post('/:id/verify', protect, async (req, res) => {
             }
         });
     } catch (error) {
-        console.error(error);
+        console.error('✗ Password verification error:', {
+            mediaId: req.params.id,
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error verifying password' });
     }
 });
@@ -113,7 +120,11 @@ router.get('/:id/stream', protect, async (req, res) => {
             fs.createReadStream(media.filepath).pipe(res);
         }
     } catch (error) {
-        console.error(error);
+        console.error('✗ File streaming error:', {
+            mediaId: req.params.id,
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
         res.status(500).json({ message: 'Error streaming file' });
     }
 });
