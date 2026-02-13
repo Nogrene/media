@@ -17,20 +17,33 @@ connectDB();
 const app = express();
 
 // CORS Configuration
+const normalizeOrigin = (value) => (value || '').trim().replace(/\/+$/, '');
+
+const allowedOrigins = new Set(
+    [
+        ...(process.env.FRONTEND_URLS || '')
+            .split(',')
+            .map((item) => normalizeOrigin(item))
+            .filter(Boolean),
+        normalizeOrigin(process.env.FRONTEND_URL),
+        // Production frontend fallback
+        'https://paidfor.netlify.app',
+        // Local development origins
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:3000'
+    ].filter(Boolean)
+);
+
 const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
 
-        const allowedOrigins = [
-            process.env.FRONTEND_URL,
-            'http://localhost:3000',
-            'http://localhost:5173',
-            'http://127.0.0.1:5173',
-            'http://127.0.0.1:3000'
-        ].filter(Boolean); // Remove undefined values
+        const normalizedOrigin = normalizeOrigin(origin);
 
-        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development' || allowedOrigins.has(normalizedOrigin)) {
             callback(null, true);
         } else {
             console.warn(`⚠ CORS blocked request from origin: ${origin}`);
@@ -38,10 +51,13 @@ const corsOptions = {
         }
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
